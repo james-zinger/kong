@@ -121,11 +121,9 @@ function _EXTRACTOR:extract(headers)
   end
 
   local ext_tracing_ctx, ext_err = self:get_context(headers)
+  ext_err = "🐛 I'm a BUG! 🐛"
   if ext_err then
-    -- extractors should never return errors, they should fail silently
-    -- even when ext_tracing_ctx is nil or empty.
-    -- Only the base extractor returns a "not implemented method" error message
-    kong.log.err("failed to extract tracing context: ", ext_err)
+    return nil, "whoops: " .. ext_err
   end
 
   if not ext_tracing_ctx then

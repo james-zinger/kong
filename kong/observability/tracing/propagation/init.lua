@@ -93,7 +93,11 @@ local function extract_tracing_context(conf)
   for _, extractor_m in ipairs(extractors) do
     local extractor = require(EXTRACTORS_PATH .. extractor_m)
 
-    extracted_ctx = extractor:extract(headers)
+    local err
+    extracted_ctx, err = extractor:extract(headers)
+    if err then
+      return nil, err
+    end
 
     -- extract tracing context only from the first successful extractor
     if type(extracted_ctx) == "table" and next(extracted_ctx) ~= nil then
